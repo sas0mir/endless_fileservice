@@ -1,37 +1,17 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"net/http"
 
-	"github.com/go-chi/chi/v5"
+	"github.com/sas0mir/endless_fileservice/application"
 )
 
 func main() {
+	app := application.New()
 
-	router := chi.NewRouter()
-
-	router.Get("/files", basicHandler)
-
-	server := &http.Server{
-		Addr:    ":3002",
-		Handler: router,
-	}
-
-	err := server.ListenAndServe()
+	err := app.Start(context.TODO())
 	if err != nil {
-		fmt.Println("Failed to listen to server ", err)
+		fmt.Println("Error starting the application:", err)
 	}
-}
-
-func basicHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodGet {
-		if r.URL.Path == "/foo" {
-		}
-	}
-
-	if r.Method == http.MethodPost {
-	}
-
-	w.Write([]byte("Hello, World!"))
 }
