@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
+	"os/signal"
 
 	"github.com/sas0mir/endless_fileservice/application"
 )
@@ -10,7 +12,10 @@ import (
 func main() {
 	app := application.New()
 
-	err := app.Start(context.TODO())
+	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer cancel()
+
+	err := app.Start(ctx)
 	if err != nil {
 		fmt.Println("Error starting the application:", err)
 	}
